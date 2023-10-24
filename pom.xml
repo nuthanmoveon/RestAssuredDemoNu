@@ -7,6 +7,14 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>RestAssuredDemo</name>
 	<description>RestAssuredDemo</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<junit.jupiter.version>5.0.0-M3</junit.jupiter.version>
+		<junit.platform.version>1.0.0-M3</junit.platform.version>
+		<maven-cucumber-reporting.version>2.8.0</maven-cucumber-reporting.version>
+
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>io.rest-assured</groupId>
@@ -27,6 +35,11 @@
 			<version>6.9.1</version> <!-- Check and ensure the version is
 			consistent -->
 		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-picocontainer</artifactId>
+			<version>4.2.6</version>
+		</dependency>
 
 		<!-- JUnit Dependency (Cucumber uses JUnit for test execution) -->
 		<dependency>
@@ -35,8 +48,53 @@
 			<version>4.12</version> <!-- Use a version compatible with your setup -->
 			<scope>test</scope>
 		</dependency>
-		
-	</dependencies>
 
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.platform</groupId>
+						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>1.0.0-M3</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>net.masterthought</groupId>
+				<artifactId>maven-cucumber-reporting</artifactId>
+				<version>${maven-cucumber-reporting.version}</version>
+				<executions>
+					<execution>
+						<id>generate-cucumber-reports</id>
+						<phase>test</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<jsonFiles>
+								<param>**/*.json</param>
+							</jsonFiles>
+							<outputDirectory>
+								${project.build.directory}/cucumber-reports</outputDirectory>
+							<inputDirectory>${project.build.directory}/cucumber</inputDirectory>
+							<checkBuildResult>false</checkBuildResult>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
